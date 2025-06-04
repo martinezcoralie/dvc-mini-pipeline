@@ -33,7 +33,7 @@ pip install -r requirements.txt
 ## 🧪 Exécution
 
 ```bash
-make clean && make reset_dvc
+make clean && make reset_dvc              # si besoin de repartir de zéro
 make init_dvc
 make reset_dataset && make run_pipeline   # exécute le pipeline avec données propres
 make noisy && make run_pipeline           # relance sur données bruitées
