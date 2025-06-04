@@ -8,6 +8,7 @@ venv:
 clean:
 	rm -rf data/raw/*.csv
 	rm -rf models/*
+	rm -rf metrics/*
 	rm -f metrics.json
 	rm -f data/raw/*.csv.dvc
 	rm -f dvc.lock
