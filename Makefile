@@ -34,7 +34,7 @@ noisy_dataset:
 
 # Montre le métriques de tous les commits
 metrics:
-	dvc metrics show --all-commits
+	dvc metrics show --all-tags
 
 # Tag après un run clean
 tag_clean:
