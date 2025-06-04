@@ -24,3 +24,7 @@ joblib.dump(model, "models/model.pkl")
 accuracy = accuracy_score(y, model.predict(X))
 with open("metrics.json", "w") as f:
     json.dump({"accuracy": accuracy}, f)
+
+# Enregistre aussi au format TSV pour dvc plots
+df = pd.DataFrame([{"step": 0, "accuracy": acc}])
+df.to_csv("metrics/metrics.tsv", sep="\t", index=False)
