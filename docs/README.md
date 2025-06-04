@@ -25,7 +25,7 @@ Script `scripts/train.py` + définition du pipeline avec `dvc stage add`.
 
 ## Étape 5 — Reproducibilité et détection de dérive
 
-`dvc repro`, suivi des métriques (`metrics.json`), et `dvc metrics diff` pour comparer.
+`dvc repro`, suivi des métriques (`metrics.json`), et `dvc metrics show` pour comparer.
 
 ---
 Voir le README principal pour les commandes synthétiques et l’installation rapide.

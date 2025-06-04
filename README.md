@@ -2,21 +2,51 @@
 
 ![DVC](https://img.shields.io/badge/DVC-enabled-brightgreen.svg)
 
-Mini pipeline démonstratif pour illustrer comment gérer un projet de machine learning versionné avec [DVC](https://dvc.org). Il permet de :
+Mini projet démonstratif pour comprendre **comment structurer et versionner un pipeline de machine learning** avec [DVC](https://dvc.org).
 
-- Générer des données synthétiques propres et bruitées
-- Entraîner un modèle avec scikit-learn
-- Suivre la performance (accuracy) et détecter la dérive via `dvc metrics diff`
+> 🔎 Objectif : explorer les bonnes pratiques de tracking des datasets, des modèles et des métriques dans un projet ML reproductible.
+
+---
+
+## 🎯 Pour qui ?
+Ce projet est fait pour toi si tu es :
+- Data scientist / ML engineer débutant ou intermédiaire
+- En train d'apprendre à structurer tes projets de manière propre et reproductible
+- Curieux de voir comment DVC s'intègre dans un workflow ML minimal
+
+---
+
+## 🧠 Ce que tu vas apprendre
+- Gérer des **datasets versionnés** avec DVC
+- Construire un pipeline ML simple avec **des étapes traçables**
+- Comparer les performances entre différents runs (ex. données bruitées vs propres)
+- Automatiser ton workflow avec **Makefile**
+
+---
+
+## 🧬 Le pipeline ML en bref
+
+```mermaid
+flowchart TD
+    A[gen_dataset_clean.py ou gen_dataset_noisy.py] --> B[data/raw/dataset.csv]
+    B --> C[train.py]
+    C --> D[models/model.pkl]
+    C --> E[metrics.json]
+```
+
+Le pipeline a une seule étape `train`, qui prend en entrée un dataset, entraîne un modèle (RandomForestClassifier), puis écrit les **métriques d’accuracy** dans `metrics.json`.
+
+---
 
 ## ⚡️ Installation rapide
 
 ```bash
 git clone https://github.com/martinezcoralie/dvc-mini-pipeline.git
 cd dvc-mini-pipeline
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+make venv
 ```
+
+---
 
 ## 📂 Structure du projet
 
@@ -24,22 +54,48 @@ pip install -r requirements.txt
 .
 ├── data/          # Données versionnées par DVC
 ├── models/        # Modèles entraînés
-├── scripts/       # Scripts exécutables
-├── src/           # Code métier
-├── dvc.yaml       # Définition du pipeline DVC
+├── scripts/       # Scripts exécutables (data generation, train)
+├── src/           # Code métier (utils etc.)
+├── dvc.yaml       # Définition du pipeline
 ├── metrics.json   # Fichier de métriques suivi par DVC
+├── Makefile       # Pour tout automatiser
 ```
 
-## 🧪 Exécution
+---
 
+## 🧪 Comment l'utiliser
+
+1. **Initialiser DVC**
 ```bash
-make clean && make reset_dvc              # si besoin de repartir de zéro
 make init_dvc
-make reset_dataset && make run_pipeline   # exécute le pipeline avec données propres
-make noisy && make run_pipeline           # relance sur données bruitées
-make metrics                              # compare les métriques
 ```
 
-## 📚 Documentation
+2. **Générer un dataset et lancer le pipeline**
+```bash
+make clean_dataset && make run_pipeline && make tag_clean    # dataset propre
+make noisy_dataset && make run_pipeline && make tag_noisy   # dataset bruité
+```
 
-Un pas-à-pas détaillé est disponible dans le fichier [docs/README.md](docs/README.md).
+3. **Comparer les métriques sur plusieurs commits**
+```bash
+make metrics
+```
+
+Exemple d’output :
+```bash
+Revision         Path           accuracy
+f30ab6b (clean)  metrics.json   0.89
+dc9bc60 (noisy)  metrics.json   0.74
+```
+
+4. **Réinitialiser complètement**
+```bash
+make clean
+make reset_dvc
+```
+
+---
+
+## 📚 Documentation complète
+
+➡️ Voir le tutoriel étape par étape dans [`docs/README.md`](docs/README.md)
