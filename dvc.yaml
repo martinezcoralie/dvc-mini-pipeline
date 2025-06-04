@@ -9,3 +9,5 @@ stages:
     metrics:
     - metrics.json:
         cache: false
+    plots:
+    - metrics/metrics.tsv

@@ -72,8 +72,8 @@ make init_dvc
 
 2. **Générer un dataset et lancer le pipeline**
 ```bash
-make clean_dataset && make run_pipeline && make tag_clean    # dataset propre
-make noisy_dataset && make run_pipeline && make tag_noisy   # dataset bruité
+make clean_dataset && make run_pipeline && make tag_clean SUFFIX=v1   # dataset propre
+make noisy_dataset && make run_pipeline && make tag_noisy SUFFIX=v1  # dataset bruité
 ```
 
 3. **Comparer les métriques sur plusieurs commits**

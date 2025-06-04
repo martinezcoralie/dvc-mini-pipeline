@@ -21,8 +21,9 @@ clean_dataset:
 
 # Reproduire le pipeline
 run_pipeline:
+	mkdir -p metrics
 	dvc repro
-	git add metrics.json dvc.lock
+	git add metrics.json dvc.lock metrics/metrics.tsv
 	git commit -m "Reproduced pipeline" || true
 
 # Générer le dataset bruité
@@ -36,15 +37,24 @@ noisy_dataset:
 metrics:
 	dvc metrics show --all-tags
 
-# Tag après un run clean
+# Usage : make tag_clean SUFFIX=v1
 tag_clean:
-	git tag -a "clean-$(shell date +%Y%m%d-%H%M)" -m "Run pipeline with clean dataset"
-	git push origin --tags
+	git tag -a "clean-$(SUFFIX)" -m "Run pipeline with clean dataset (suffix: $(SUFFIX))"
+	git push origin "clean-$(SUFFIX)"
 
-# Tag après un run noisy
+# Usage : make tag_noisy SUFFIX=v2
 tag_noisy:
-	git tag -a "noisy-$(shell date +%Y%m%d-%H%M)" -m "Run pipeline with noisy dataset"
-	git push origin --tags
+	git tag -a "noisy-$(SUFFIX)" -m "Run pipeline with noisy dataset (suffix: $(SUFFIX))"
+	git push origin "noisy-$(SUFFIX)"
+
+# Affiche les plots du dernier run
+plots_show:
+	dvc plots show
+
+# Compare deux tags (à passer en arguments)
+# Exemple : make plots_diff FROM=clean-v1 TO=noisy-v1
+plots_diff:
+	dvc plots diff $(FROM) $(TO)
 
 # Supprimer DVC
 reset_dvc:
@@ -58,3 +68,12 @@ init_dvc:
 	dvc init
 	git add .dvc .gitignore
 	git commit -m "Init DVC" || true
+
+
+# Usage : make full_run_compare SUFFIX=v1
+full_run_compare:
+	make clean_dataset && make run_pipeline
+	make tag_clean SUFFIX=$(SUFFIX)
+	make noisy_dataset && make run_pipeline
+	make tag_noisy SUFFIX=$(SUFFIX)
+	make plots_diff FROM=clean-$(SUFFIX) TO=noisy-$(SUFFIX)

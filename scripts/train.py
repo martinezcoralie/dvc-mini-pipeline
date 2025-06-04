@@ -26,5 +26,5 @@ with open("metrics.json", "w") as f:
     json.dump({"accuracy": accuracy}, f)
 
 # Enregistre aussi au format TSV pour dvc plots
-df = pd.DataFrame([{"step": 0, "accuracy": acc}])
+df = pd.DataFrame([{"step": 0, "accuracy": accuracy}])
 df.to_csv("metrics/metrics.tsv", sep="\t", index=False)
